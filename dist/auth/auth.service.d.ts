@@ -9,7 +9,9 @@ export declare class AuthService {
     register(createAuthDto: CreateAuthDto): Promise<{
         message: string;
     }>;
-    findAll(): string;
+    verifyOtp(gmail: string, otp: string): Promise<{
+        message: string;
+    }>;
     findOne(id: number): string;
     remove(id: number): string;
 }

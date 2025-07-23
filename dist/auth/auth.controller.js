@@ -25,8 +25,9 @@ let AuthController = class AuthController {
         await this.authService.register(createAuthDto);
         return { message: "Iltimos emailingizga yuborilgan kodni kiriting!" };
     }
-    findAll() {
-        return this.authService.findAll();
+    async verifyOtp(gmail, otp) {
+        await this.authService.verifyOtp(gmail, otp);
+        return { message: "Email manzilingiz tasdiqlandi!" };
     }
     findOne(id) {
         return this.authService.findOne(+id);
@@ -44,11 +45,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "findAll", null);
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "verifyOtp", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),

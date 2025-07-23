@@ -39,7 +39,7 @@ export class AuthService {
                 throw new ConflictException("Iltimos, 2 daqiqa kutib qayta urinib ko‘ring!");
             }
             if (existingUser && existingUser.isVerified) {
-                throw new ConflictException("Bu email bilan foydalanuvchi mavjud!");
+                throw new ConflictException("Bu email bilan foydalanuvchi mavjud!")
             }
 
             const newUser = this.authRepository.create({
@@ -59,9 +59,29 @@ export class AuthService {
         }
     }
 
-    findAll() {
-        return `This action returns all auth`;
+    async verifyOtp(gmail: string, otp: string) {
+        try {
+            const user = await this.authRepository.findOne({ where: { gmail } });
+            if (!user) throw new ConflictException("Foydalanuvchi topilmadi!");
+
+            if (user.otp !== otp) throw new ConflictException("Noto'g'ri OTP!");
+            const otpTime = user.otpTime;
+            const currentTime = new Date();
+            const timeDifference = (currentTime.getTime() - otpTime.getTime())
+            if (timeDifference > 2 * 60 * 1000) {
+                throw new ConflictException("OTP muddati tugagan!");
+            }
+            user.isVerified = true;
+            user.otp = '';
+            user.otpTime = new Date(0);
+            await this.authRepository.save(user);
+            return { message: "Email manzilingiz tasdiqlandi!" };
+        } catch (error) {
+            if (error instanceof ConflictException) throw error
+            throw new InternalServerErrorException('Serverda xato yuz berdi');
+        }
     }
+
 
     findOne(id: number) {
         return `This action returns a #${id} auth`;

@@ -12,9 +12,10 @@ export class AuthController {
         return { message: "Iltimos emailingizga yuborilgan kodni kiriting!" };
     }
 
-    @Get()
-    findAll() {
-        return this.authService.findAll();
+    @Post()
+    async verifyOtp(@Body() gmail: string, otp: string) {
+        await this.authService.verifyOtp(gmail, otp);
+        return { message: "Email manzilingiz tasdiqlandi!" };
     }
 
     @Get(':id')

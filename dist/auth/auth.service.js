@@ -66,8 +66,30 @@ let AuthService = class AuthService {
             throw new common_1.InternalServerErrorException('Serverda xato yuz berdi');
         }
     }
-    findAll() {
-        return `This action returns all auth`;
+    async verifyOtp(gmail, otp) {
+        try {
+            const user = await this.authRepository.findOne({ where: { gmail } });
+            if (!user)
+                throw new common_1.ConflictException("Foydalanuvchi topilmadi!");
+            if (user.otp !== otp)
+                throw new common_1.ConflictException("Noto'g'ri OTP!");
+            const otpTime = user.otpTime;
+            const currentTime = new Date();
+            const timeDifference = (currentTime.getTime() - otpTime.getTime());
+            if (timeDifference > 2 * 60 * 1000) {
+                throw new common_1.ConflictException("OTP muddati tugagan!");
+            }
+            user.isVerified = true;
+            user.otp = '';
+            user.otpTime = new Date(0);
+            await this.authRepository.save(user);
+            return { message: "Email manzilingiz tasdiqlandi!" };
+        }
+        catch (error) {
+            if (error instanceof common_1.ConflictException)
+                throw error;
+            throw new common_1.InternalServerErrorException('Serverda xato yuz berdi');
+        }
     }
     findOne(id) {
         return `This action returns a #${id} auth`;

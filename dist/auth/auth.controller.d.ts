@@ -6,7 +6,9 @@ export declare class AuthController {
     create(createAuthDto: CreateAuthDto): Promise<{
         message: string;
     }>;
-    findAll(): string;
+    verifyOtp(gmail: string, otp: string): Promise<{
+        message: string;
+    }>;
     findOne(id: string): string;
     remove(id: string): string;
 }
