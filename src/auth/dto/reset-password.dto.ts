@@ -1,7 +1,6 @@
-import { IsString, IsEmail, MinLength, MaxLength, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
-
-export class CreateAuthDto {
+export class ResetPasswordDto {
     @IsString({ message: "Gmail stringda kiritilishi shart!" })
     @IsEmail()
     @MinLength(3, { message: "Kiritilgan gmail 3 ta belgidan kam bo'lmasligi shart!" })
@@ -10,8 +9,10 @@ export class CreateAuthDto {
     gmail: string;
 
     @IsString()
+    otp: string;
+    @IsString()
     @MinLength(6, { message: "Kiritilgan password 6 ta belgidan kam bo'lmasligi shart!" })
     @MaxLength(100, { message: "Kiritlgan password 100 ta belgidan ko'p bo'lmasligi shart!" })
     @IsNotEmpty({ message: "Password maydoni bo'sh bo'lmasligi shart!" })
-    password: string
+    newPassword: string;
 }

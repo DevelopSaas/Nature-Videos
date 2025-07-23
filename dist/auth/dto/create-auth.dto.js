@@ -21,12 +21,14 @@ __decorate([
     (0, class_validator_1.IsEmail)(),
     (0, class_validator_1.MinLength)(3, { message: "Kiritilgan gmail 3 ta belgidan kam bo'lmasligi shart!" }),
     (0, class_validator_1.MaxLength)(70, { message: "Kiritlgan gmail 70 ta belgidan ko'p bo'lmasligi shart!" }),
+    (0, class_validator_1.IsNotEmpty)({ message: "Gmail maydoni bo'sh bo'lmasligi kerak!" }),
     __metadata("design:type", String)
 ], CreateAuthDto.prototype, "gmail", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(6, { message: "Kiritilgan password 6 ta belgidan kam bo'lmasligi shart!" }),
     (0, class_validator_1.MaxLength)(100, { message: "Kiritlgan password 100 ta belgidan ko'p bo'lmasligi shart!" }),
+    (0, class_validator_1.IsNotEmpty)({ message: "Password maydoni bo'sh bo'lmasligi shart!" }),
     __metadata("design:type", String)
 ], CreateAuthDto.prototype, "password", void 0);
 //# sourceMappingURL=create-auth.dto.js.map

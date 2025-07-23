@@ -5,5 +5,6 @@ var Role;
 (function (Role) {
     Role["USER"] = "user";
     Role["VIDEOGRAF"] = "videograf";
+    Role["SUPERADMIN"] = "superadmin";
 })(Role || (exports.Role = Role = {}));
 //# sourceMappingURL=role-enum.js.map
