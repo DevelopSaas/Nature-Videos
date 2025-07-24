@@ -14,7 +14,6 @@ export class AuthService {
         private readonly emailService: EmailService,
     ) { }
 
-    /////////////// Register
     async register(createAuthDto: CreateAuthDto) {
         try {
             const { gmail, password } = createAuthDto;
@@ -60,16 +59,17 @@ export class AuthService {
     }
 
     findAll() {
-        return `This action returns all auth`;
+        console.log('--- AuthService.findAll() ishga tushdi (bu keshdan bo\'lmasa ko\'rinasiz) ---');
+
+        return `This action returns all auth`; 
     }
 
     findOne(id: number) {
-        return `This action returns a #${id} auth`;
+        console.log(`--- AuthService.findOne(${id}) ishga tushdi (bu keshdan bo\'lmasa ko\'rinasiz) ---`);
+       
+        return `This action returns a #${id} auth`; 
     }
 
-    //   update(id: number, updateAuthDto: UpdateAuthDto) {
-    //     return `This action updates a #${id} auth`;
-    //   }
 
     remove(id: number) {
         return `This action removes a #${id} auth`;

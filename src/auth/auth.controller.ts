@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto'
+import { CreateAuthDto } from './dto/create-auth.dto';
+import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
+import { SkipThrottle } from '@nestjs/throttler';
 
 @Controller('api/auth')
 export class AuthController {
@@ -12,11 +14,18 @@ export class AuthController {
         return { message: "Iltimos emailingizga yuborilgan kodni kiriting!" };
     }
 
+    @SkipThrottle()
+    @UseInterceptors(CacheInterceptor)
+    @CacheKey('all_auth_users')
+    @CacheTTL(60)
     @Get()
     findAll() {
         return this.authService.findAll();
     }
 
+    @SkipThrottle()
+    @UseInterceptors(CacheInterceptor)
+    @CacheTTL(60)
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.authService.findOne(+id);

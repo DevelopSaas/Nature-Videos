@@ -12,12 +12,20 @@ const config_1 = require("@nestjs/config");
 const auth_module_1 = require("./auth/auth.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const auth_entity_1 = require("./auth/entities/auth.entity");
+const throttler_1 = require("@nestjs/throttler");
+const core_1 = require("@nestjs/core");
+const cache_manager_1 = require("@nestjs/cache-manager");
+const redisStore = require("cache-manager-redis-store");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [config_1.ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
+        imports: [
+            config_1.ConfigModule.forRoot({
+                envFilePath: '.env',
+                isGlobal: true
+            }),
             typeorm_1.TypeOrmModule.forRoot({
                 type: "postgres",
                 host: 'localhost',
@@ -27,7 +35,28 @@ exports.AppModule = AppModule = __decorate([
                 database: 'nature_videoes',
                 entities: [auth_entity_1.Auth],
                 synchronize: true,
-            }), auth_module_1.AuthModule]
+            }),
+            auth_module_1.AuthModule,
+            throttler_1.ThrottlerModule.forRoot([
+                {
+                    ttl: 60 * 60 * 1000,
+                    limit: 50,
+                    name: 'hourly_limit',
+                },
+            ]),
+            cache_manager_1.CacheModule.register({
+                store: redisStore,
+                host: 'localhost',
+                port: 6379,
+                ttl: 60,
+            }),
+        ],
+        providers: [
+            {
+                provide: core_1.APP_GUARD,
+                useClass: throttler_1.ThrottlerGuard,
+            },
+        ],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

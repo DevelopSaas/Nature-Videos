@@ -67,9 +67,11 @@ let AuthService = class AuthService {
         }
     }
     findAll() {
+        console.log('--- AuthService.findAll() ishga tushdi (bu keshdan bo\'lmasa ko\'rinasiz) ---');
         return `This action returns all auth`;
     }
     findOne(id) {
+        console.log(`--- AuthService.findOne(${id}) ishga tushdi (bu keshdan bo\'lmasa ko\'rinasiz) ---`);
         return `This action returns a #${id} auth`;
     }
     remove(id) {

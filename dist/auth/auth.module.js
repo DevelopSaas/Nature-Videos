@@ -13,14 +13,20 @@ const auth_controller_1 = require("./auth.controller");
 const typeorm_1 = require("@nestjs/typeorm");
 const auth_entity_1 = require("./entities/auth.entity");
 const email_module_1 = require("../email/email.module");
+const cache_manager_1 = require("@nestjs/cache-manager");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([auth_entity_1.Auth]), email_module_1.EmailModule],
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([auth_entity_1.Auth]),
+            email_module_1.EmailModule,
+            cache_manager_1.CacheModule.register({}),
+        ],
         controllers: [auth_controller_1.AuthController],
         providers: [auth_service_1.AuthService],
+        exports: [auth_service_1.AuthService],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map
