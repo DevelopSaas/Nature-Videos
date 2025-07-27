@@ -1,6 +1,8 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class ResetPasswordDto {
+     @ApiProperty({ example: 'example@gmail.com' })
     @IsString({ message: "Gmail stringda kiritilishi shart!" })
     @IsEmail()
     @MinLength(3, { message: "Kiritilgan gmail 3 ta belgidan kam bo'lmasligi shart!" })
@@ -8,6 +10,7 @@ export class ResetPasswordDto {
     @IsNotEmpty({ message: "Gmail maydoni bo'sh bo'lmasligi kerak!" })
     gmail: string;
 
+     @ApiProperty({ example: 'NewStrongPassword123', description: 'Yangi parol' })
     @IsString()
     otp: string;
     @IsString()

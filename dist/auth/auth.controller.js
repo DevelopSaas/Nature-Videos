@@ -24,6 +24,7 @@ const roles_decorator_1 = require("../common/decorators/roles.decorator");
 const update_authRole_dto_1 = require("./dto/update-authRole.dto");
 const _send_reset_dto_1 = require("./dto/ send-reset.dto");
 const reset_password_dto_1 = require("./dto/reset-password.dto");
+const swagger_1 = require("@nestjs/swagger");
 let AuthController = class AuthController {
     authService;
     constructor(authService) {
@@ -31,11 +32,11 @@ let AuthController = class AuthController {
     }
     async create(createAuthDto) {
         await this.authService.register(createAuthDto);
-        return { message: "Iltimos emailingizga yuborilgan kodni kiriting!" };
+        return { message: 'Iltimos emailingizga yuborilgan kodni kiriting!' };
     }
     async verifyOtp(verifyOtpDto) {
         await this.authService.verifyOtp(verifyOtpDto);
-        return { message: "Email manzilingiz tasdiqlandi!" };
+        return { message: 'Email manzilingiz tasdiqlandi!' };
     }
     async login(loginDto, res) {
         return await this.authService.login(loginDto, res);
@@ -68,6 +69,10 @@ let AuthController = class AuthController {
 exports.AuthController = AuthController;
 __decorate([
     (0, common_1.Post)('register'),
+    (0, swagger_1.ApiOperation)({ summary: 'Foydalanuvchini roʻyxatdan oʻtkazish' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Tasdiqlash kodi yuborildi.' }),
+    (0, swagger_1.ApiResponse)({ status: 409, description: 'Email mavjud yoki 2 daqiqa kutish kerak.' }),
+    (0, swagger_1.ApiResponse)({ status: 500, description: 'Serverda xato yuz berdi.' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_auth_dto_1.CreateAuthDto]),
@@ -75,6 +80,10 @@ __decorate([
 ], AuthController.prototype, "create", null);
 __decorate([
     (0, common_1.Post)('verify_otp'),
+    (0, swagger_1.ApiOperation)({ summary: 'Emailni OTP orqali tasdiqlash' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Email tasdiqlandi.' }),
+    (0, swagger_1.ApiResponse)({ status: 409, description: 'Foydalanuvchi topilmadi, notoʻgʻri OTP yoki OTP muddati tugagan.' }),
+    (0, swagger_1.ApiResponse)({ status: 500, description: 'Serverda xato yuz berdi.' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [verify_otp_dto_1.VerifyOtpDto]),
@@ -82,6 +91,10 @@ __decorate([
 ], AuthController.prototype, "verifyOtp", null);
 __decorate([
     (0, common_1.Post)('login'),
+    (0, swagger_1.ApiOperation)({ summary: 'Foydalanuvchi tizimga kiradi' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Kirish muvaffaqiyatli, JWT token qaytariladi.' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Email yoki parol notoʻgʻri, yoki tasdiqlanmagan.' }),
+    (0, swagger_1.ApiResponse)({ status: 500, description: 'Serverda xato yuz berdi.' }),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Res)({ passthrough: true })),
     __metadata("design:type", Function),
@@ -89,7 +102,10 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
 __decorate([
-    (0, common_1.Post)("refresh"),
+    (0, common_1.Post)('refresh'),
+    (0, swagger_1.ApiOperation)({ summary: 'Yangi access token olish (refresh token orqali)' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Yangi access token qaytariladi.' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Refresh token topilmadi yoki yaroqsiz.' }),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -97,14 +113,21 @@ __decorate([
 ], AuthController.prototype, "refresh", null);
 __decorate([
     (0, common_1.Get)('all'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)("jwt"), roles_guard_1.RolesGuard),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(role_enum_1.Role.SUPERADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Barcha foydalanuvchilar roʻyxatini olish (faqat SUPERADMIN)' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Foydalanuvchilar roʻyxati' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Foydalanuvchilar topilmadi.' }),
+    (0, swagger_1.ApiResponse)({ status: 500, description: 'Serverda xato yuz berdi.' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "getAllUsers", null);
 __decorate([
     (0, common_1.Post)('logout'),
+    (0, swagger_1.ApiOperation)({ summary: 'Tizimdan chiqish (cookiedagi refresh_token ni tozalash)' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Tizimdan chiqildi.' }),
     __param(0, (0, common_1.Res)({ passthrough: true })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -114,6 +137,12 @@ __decorate([
     (0, common_1.Put)(':id/role'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(role_enum_1.Role.SUPERADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Foydalanuvchi rolini o‘zgartirish (faqat SUPERADMIN)' }),
+    (0, swagger_1.ApiParam)({ name: 'id', type: 'string' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Foydalanuvchi roli yangilandi.' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Foydalanuvchi topilmadi.' }),
+    (0, swagger_1.ApiResponse)({ status: 500, description: 'Serverda xato yuz berdi.' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -122,6 +151,10 @@ __decorate([
 ], AuthController.prototype, "updateUserRole", null);
 __decorate([
     (0, common_1.Post)('forgot_password'),
+    (0, swagger_1.ApiOperation)({ summary: 'Parolni tiklash uchun OTP yuborish' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Emailga tiklash kodi yuborildi.' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Foydalanuvchi topilmadi.' }),
+    (0, swagger_1.ApiResponse)({ status: 500, description: 'Serverda xato yuz berdi.' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [_send_reset_dto_1.SendResetDto]),
@@ -129,12 +162,18 @@ __decorate([
 ], AuthController.prototype, "sendResetCode", null);
 __decorate([
     (0, common_1.Post)('reset_password'),
+    (0, swagger_1.ApiOperation)({ summary: 'Parolni qayta o‘rnatish (OTP orqali)' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Parol muvaffaqiyatli yangilandi.' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Foydalanuvchi topilmadi.' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Noto‘g‘ri OTP yoki muddati tugagan.' }),
+    (0, swagger_1.ApiResponse)({ status: 500, description: 'Serverda xato yuz berdi.' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [reset_password_dto_1.ResetPasswordDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "resetPassword", null);
 exports.AuthController = AuthController = __decorate([
+    (0, swagger_1.ApiTags)('Auth'),
     (0, common_1.Controller)('api/auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], AuthController);

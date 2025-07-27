@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateAuthDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class CreateAuthDto {
     gmail;
@@ -17,6 +18,7 @@ class CreateAuthDto {
 }
 exports.CreateAuthDto = CreateAuthDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 'example@gmail.com', description: 'Foydalanuvchining email manzili' }),
     (0, class_validator_1.IsString)({ message: "Gmail stringda kiritilishi shart!" }),
     (0, class_validator_1.IsEmail)(),
     (0, class_validator_1.MinLength)(3, { message: "Kiritilgan gmail 3 ta belgidan kam bo'lmasligi shart!" }),
@@ -25,6 +27,7 @@ __decorate([
     __metadata("design:type", String)
 ], CreateAuthDto.prototype, "gmail", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 'StrongPassword123', description: 'Foydalanuvchining paroli' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(6, { message: "Kiritilgan password 6 ta belgidan kam bo'lmasligi shart!" }),
     (0, class_validator_1.MaxLength)(100, { message: "Kiritlgan password 100 ta belgidan ko'p bo'lmasligi shart!" }),
